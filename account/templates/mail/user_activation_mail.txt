@@ -1,0 +1,9 @@
+{{ user.last_name}} {{ user.first_name}}様
+
+Agilerからのお知らせです。
+
+アカウントの仮登録が完了しました。
+下記URLをクリックして、アカウントを本登録を完了してください。
+本登録URLの有効時間は{{ url_expiration_min }}分です。
+
+本登録URL: {{ activation_url }}

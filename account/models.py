@@ -1,8 +1,12 @@
-from django.db import models
+import uuid
+
+from datetime import datetime, timedelta
+from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
@@ -94,5 +98,64 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name
 
-    def email_user(self, subject, message, from_email=None, **kwargs):
+    def email_user(
+            self, subject, message,
+            from_email=settings.DEFAULT_FROM_EMAIL, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class UserActivationTokenManager(models.Manager):
+    """ ユーザーアクティベーション関連のマネージャー """
+
+    def activate_user(self, post_token):
+        """ユーザーをアクティベートする
+
+        Args:
+            post_token (string): アクティベーショントークン
+
+        Returns:
+            Bool: 成否
+        """
+        saved_token = self.filter(
+            token=post_token,
+            expired_at__gte=datetime.now()
+        ).first()
+
+        if hasattr(saved_token, 'user'):
+            user = saved_token.user
+            user.is_active = True
+            user.save()
+
+            return True
+
+        return False
+
+    def generate(self, user: User):
+        """
+        ユーザーアクティベーショントークンを生成する。
+        （デリートインサート）
+
+        Args:
+            user (User): ユーザーインスタンス
+
+        Returns:
+            UserActivationToken: UserActivationTokenインスタンス
+        """
+        self.filter(user=user).delete()
+        token = self.model(
+            user=user,
+            expired_at=datetime.now()+timedelta(
+                minutes=settings.USER_ACTIVATION_EXPIRED_MIN)
+        )
+        token.save()
+
+        return token
+
+
+class UserActivationToken(models.Model):
+    """ ユーザーアクティベーションコードを保存するモデル """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4)
+    expired_at = models.DateTimeField()
+
+    objects = UserActivationTokenManager()

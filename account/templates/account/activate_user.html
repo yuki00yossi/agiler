@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class='container'>
+    <div class='float-box text-center'>
+        {% if result %}
+        <div class=''>
+            会員登録完了
+        </div>
+        <div class='paragraph'>
+            会員登録が完了しました。
+        </div>
+        {% else %}
+        <div>本登録に失敗しました。</div>
+        <div class='paragraph'>
+            本登録用URLの有効期限が切れているか、存在しないURLです。<br>
+            再度ログインした後、アカウントアクティベーションURLを再送信してください。
+        </div>
+        {% endif %}
+        <div class='paragraph'>
+            <a href='#'>ログインページへ</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
