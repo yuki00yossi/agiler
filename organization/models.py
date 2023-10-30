@@ -19,6 +19,8 @@ class Organization(models.Model):
         through='Member',
         through_fields=('organization', 'user')
     )
+    created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='更新日', auto_now=True)
 
     REQUIRED_FIELDS = [
         'name', 'post_code', 'prefecture',
