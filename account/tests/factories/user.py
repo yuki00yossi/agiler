@@ -6,11 +6,18 @@ from factory.django import DjangoModelFactory
 from django.contrib.auth import get_user_model
 
 
-# class UserFactory(DjangoModelFactory):
-#     class Meta:
-#         model = get_user_model()
+Faker._DEFAULT_LOCALE = 'ja_JP'
 
-#     email = Faker('email')
-#     first_name = models.CharField(_('first name'), max_length=64)
-#     last_name = models.CharField(_('last_name'), max_length=64)
-#     profile_text = models.CharField(
+
+class UserFactory(DjangoModelFactory):
+    """ ユーザーのテスト用ダミーデータ """
+    class Meta:
+        model = get_user_model()
+
+    email = Faker('email')
+    first_name = Faker('first_name')
+    last_name = Faker('last_name')
+    profile_text = Faker('text')
+    is_staff = False
+    is_active = True
+    is_superuser = False
