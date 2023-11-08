@@ -5,6 +5,11 @@ from django.db import models
 # Create your models here.
 class Organization(models.Model):
     """ 組織クラス """
+    status_coices = (
+        (1, 'アクティブ'),
+        (2, '非アクティブ'),
+        (99, '利用停止'),
+    )
     name = models.CharField(verbose_name='組織名', max_length=256)
     post_code = models.CharField(verbose_name='郵便番号', max_length=20)
     prefecture = models.CharField(verbose_name='都道府県', max_length=256)
@@ -13,7 +18,9 @@ class Organization(models.Model):
     tel_number = models.CharField(verbose_name='代表電話番号', max_length=20)
     manager_name = models.CharField(verbose_name='担当者名', max_length=256)
     plans = models.IntegerField(verbose_name='利用プランID')
-    status = models.IntegerField(verbose_name='ステータス', default=1)
+    status = models.IntegerField(
+        verbose_name='ステータス', default=2, choices=status_coices
+    )
     members = models.ManyToManyField(
         get_user_model(),
         through='Member',

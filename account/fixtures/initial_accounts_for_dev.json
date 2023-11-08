@@ -1,10 +1,9 @@
-[
-    {
+[{
         "model": "account.User",
         "fields": {
             "id": 1,
             "email": "super@example.com",
-            "password": "pbkdf2_sha256$600000$T7ewhdJZnq2wpOiZOyc7Nw$43xTO1nTlSZDo1SAB0A7R7C/s31t7TLvMRjrmYl4bFY=",
+            "password": "password",
             "first_name": "superuser",
             "last_name": "last",
             "profile_text": "Hi! I'm superuser!!",
@@ -20,7 +19,7 @@
         "fields": {
             "id": 2,
             "email": "active1@example.com",
-            "password": "pbkdf2_sha256$600000$T7ewhdJZnq2wpOiZOyc7Nw$43xTO1nTlSZDo1SAB0A7R7C/s31t7TLvMRjrmYl4bFY=",
+            "password": "password",
             "first_name": "active1",
             "last_name": "last1",
             "profile_text": "Hi! I'm active1@example.com!!",
@@ -36,7 +35,7 @@
         "fields": {
             "id": 3,
             "email": "active2@example.com",
-            "password": "pbkdf2_sha256$600000$T7ewhdJZnq2wpOiZOyc7Nw$43xTO1nTlSZDo1SAB0A7R7C/s31t7TLvMRjrmYl4bFY=",
+            "password": "password",
             "first_name": "active2",
             "last_name": "last2",
             "profile_text": "Hi! I'm active2@example.com!!",
@@ -52,7 +51,7 @@
         "fields": {
             "id": 4,
             "email": "disactive1@example.com",
-            "password": "pbkdf2_sha256$600000$T7ewhdJZnq2wpOiZOyc7Nw$43xTO1nTlSZDo1SAB0A7R7C/s31t7TLvMRjrmYl4bFY=",
+            "password": "password",
             "first_name": "disactive1",
             "last_name": "last1",
             "profile_text": "Hi! I'm disactive1@example.com!!",
@@ -62,5 +61,5 @@
             "created_at": "2023-10-21 19:00",
             "updated_at": "2023-10-21 19:00"
         }
-    }  
+    }
 ]

@@ -1,12 +1,13 @@
 import uuid
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -118,7 +119,7 @@ class UserActivationTokenManager(models.Manager):
         """
         saved_token = self.filter(
             token=post_token,
-            expired_at__gte=datetime.now()
+            expired_at__gte=timezone.now()
         ).first()
 
         if hasattr(saved_token, 'user'):
@@ -144,7 +145,7 @@ class UserActivationTokenManager(models.Manager):
         self.filter(user=user).delete()
         token = self.model(
             user=user,
-            expired_at=datetime.now()+timedelta(
+            expired_at=timezone.now()+timedelta(
                 minutes=settings.USER_ACTIVATION_EXPIRED_MIN)
         )
         token.save()
