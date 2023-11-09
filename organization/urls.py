@@ -14,5 +14,3 @@ urlpatterns = [
 router = routers.DefaultRouter()
 router.register('organization', views.OrganizationViewsets)
 urlpatterns += router.urls
-
-print(urlpatterns)
