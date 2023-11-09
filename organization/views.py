@@ -1,15 +1,16 @@
 # from django.shortcuts import render
 from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import viewsets
+
+from .serializer import OrganizationSerializer
+from .models import Organization
 
 
 # Create your views here.
-class Organization(generics.ListAPIView):
+class OrganizationViewsets(viewsets.ModelViewSet):
     """ 組織のビュー """
-    def get(self, request, format=None):
-        # organizations = Organization.objects.all()
-        # organization = OrganizationSerializer(organizations, many=True)
-        return True
+    serializer_class = OrganizationSerializer
+    queryset = Organization.objects.filter(status=1)
 
 
 class OrganizationListJoined(generics.ListAPIView):
