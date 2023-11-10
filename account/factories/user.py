@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta
-
-from factory import Faker, PostGenerationMethodCall, Sequence
+from factory import Faker
 from factory.django import DjangoModelFactory, Password
 
 from django.contrib.auth import get_user_model
