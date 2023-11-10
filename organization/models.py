@@ -23,7 +23,7 @@ class Organization(models.Model):
     )
     members = models.ManyToManyField(
         get_user_model(),
-        through='Member',
+        through='OrganizationUser',
         through_fields=('organization', 'user')
     )
     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
@@ -43,7 +43,7 @@ class Organization(models.Model):
         return self.name
 
 
-class Member(models.Model):
+class OrganizationUser(models.Model):
     """ 組織とユーザーの中間テーブル """
     # メンバーステータスの選択肢
     status_choices = (
@@ -68,6 +68,7 @@ class Member(models.Model):
     status = models.IntegerField(verbose_name='ステータス', choices=status_choices)
 
     class Meta:
+        db_table = 'organization_users'
         db_table_comment = '組織とユーザーの中間テーブル'
         verbose_name = 'メンバー'
         verbose_name_plural = 'メンバー'

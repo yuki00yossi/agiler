@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from account.models import User, UserActivationToken
 
@@ -15,8 +16,8 @@ def send_user_activation_mail(sender, instance, created, **kwargs):
         return
     token = UserActivationToken.objects.generate(instance)
     subject = 'Please Activate Your Account'
-    activation_url = settings.SITE_URL_ROOT + '/account/activate/'
-    activation_url += str(token.token)
+    activation_url = settings.SITE_URL_ROOT
+    activation_url += reverse('account:activate', args=[token.token])
     context = {
         'user': instance,
         'activation_url': activation_url,

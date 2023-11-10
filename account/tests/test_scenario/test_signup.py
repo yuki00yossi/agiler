@@ -42,7 +42,7 @@ class signupTestCase(TestCase):
         # メールに記載のURLを叩く
         pattern = 'http.*'
         result = re.search(pattern, mail.outbox[0].body, re.S)
-        url = result.group() + '/'
+        url = result.group()
         result = client.get(url)
         self.assertEqual(result.status_code, 200)
         # is_activeがTrueになっていることを確認
