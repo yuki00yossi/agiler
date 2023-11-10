@@ -5,6 +5,12 @@ from django.db import models
 # Create your models here.
 class Organization(models.Model):
     """ 組織クラス """
+    plan_choices = (
+        (1, '無料プラン'),
+        (2, 'スタンダード'),
+        (3, 'エンタープライズ')
+    )
+
     status_coices = (
         (1, 'アクティブ'),
         (2, '非アクティブ'),
@@ -17,7 +23,7 @@ class Organization(models.Model):
     address = models.CharField(verbose_name='住所(市区町村以下)', max_length=256)
     tel_number = models.CharField(verbose_name='代表電話番号', max_length=20)
     manager_name = models.CharField(verbose_name='担当者名', max_length=256)
-    plans = models.IntegerField(verbose_name='利用プランID')
+    plans = models.IntegerField(verbose_name='利用プランID', choices=plan_choices)
     status = models.IntegerField(
         verbose_name='ステータス', default=2, choices=status_coices
     )
