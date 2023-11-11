@@ -3,7 +3,7 @@ import re
 from django.core import mail
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse_lazy
+from django.urls import reverse
 from rest_framework.test import APIClient
 
 
@@ -16,12 +16,12 @@ class signupTestCase(TestCase):
         client = APIClient()
         param = {
             'email': 'signup@example.com',
-            'password': 'password',
+            'password': 'adlkfjalig',
             'first_name': 'サンプル',
             'last_name': '太郎',
             'profile_text': '',
         }
-        url = reverse_lazy('account:signup')
+        url = reverse('account:user-list')
         res = client.post(url, param)
         # ステータスコードの確認
         self.assertEqual(res.status_code, 201)

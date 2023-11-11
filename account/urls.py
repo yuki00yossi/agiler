@@ -12,7 +12,7 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
-router.register('account', views.UserViewsets, '')
+router.register('account', views.UserViewsets, 'user')
 urlpatterns += router.urls
 
 
