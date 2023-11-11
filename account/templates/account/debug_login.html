@@ -1,0 +1,6 @@
+<form action="/api/debug/login" method="POST">
+    {% csrf_token %}
+    mail:<input type="email" name="email" /><br />
+    password: <input type="text" name="password" /><br />
+    <button>ログイン</button>
+</form>

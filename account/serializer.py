@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from organization.serializer import OrganizationSerializer
 
 
@@ -26,3 +27,17 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+    def update(self, instance, validated_data):
+        user = super().update(instance, validated_data)
+        try:
+            password = validated_data['password']
+            user.set_password(password)
+            user.save()
+        except KeyError:
+            pass
+        return user
+
+    def validate_password(self, value):
+        validate_password(value)
+        return value
