@@ -18,6 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        """新規ユーザー登録"""
         user = get_user_model().objects.create_user(
             email=validated_data['email'],
             first_name=validated_data['first_name'],
@@ -29,14 +30,15 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        user = super().update(instance, validated_data)
-        try:
-            password = validated_data['password']
-            user.set_password(password)
-            user.save()
-        except KeyError:
-            pass
-        return user
+        """ユーザー情報アップデート"""
+        if ('email' in validated_data):
+            # メールアドレス変更は専用のMailSerializerで行うため削除
+            del validated_data['email']
+        if ('password' in validated_data):
+            # パスワード変更は専用のPasswordSerializerで行うため削除
+            del validated_data['password']
+
+        return super().update(instance, validated_data)
 
     def validate_password(self, value):
         validate_password(value)

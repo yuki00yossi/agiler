@@ -176,3 +176,18 @@ class UserSerializerTest(TestCase):
         serializer = UserSerializer(data=data)
         result = serializer.is_valid()
         self.assertEqual(result, False)
+
+    def test_not_update_email(self):
+        """UserSerializer.updateでメールアドレスの変更が出来ないこと"""
+        user = self.test_user
+        serializer = UserSerializer(instance=user)
+        serializer.update(user, validated_data={'email': 'change@example.com'})
+        self.assertEqual(user.email, serializer.data['email'])
+
+    def test_cannot_update_password(self):
+        """UserSerializer.updateでパスワードの変更が出来ないこと"""
+        user = self.test_user
+        serializer = UserSerializer(instance=user)
+        serializer.update(user, validated_data={'password': 'changepassword'})
+        user2 = User.objects.get(pk=user.pk)
+        self.assertEqual(user.password, user2.password)
