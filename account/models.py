@@ -1,3 +1,4 @@
+import secrets
 import uuid
 
 from datetime import timedelta
@@ -160,3 +161,16 @@ class UserActivationToken(models.Model):
     expired_at = models.DateTimeField()
 
     objects = UserActivationTokenManager()
+
+
+class PasswordResetToken(models.Model):
+    """パスワードリセット用のトークンを発行する"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(
+        verbose_name='パスワードリセットトークン',
+        max_length=256,
+        default=secrets.token_urlsafe(32)
+    )
+    is_used = models.BooleanField(verbose_name='使用済みフラグ', default=False)
+    created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
+    expired_at = models.DateTimeField(verbose_name='トークン有効期限')
