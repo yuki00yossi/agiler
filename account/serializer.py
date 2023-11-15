@@ -43,3 +43,18 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_password(self, value):
         validate_password(value)
         return value
+
+
+class PasswordSerializer(serializers.Serializer):
+    """パスワードを扱うシリアライザー"""
+    password = serializers.CharField()
+
+    def validate_password(self, value):
+        validate_password(value)
+        return value
+
+
+class PasswordSerializerWithToken(PasswordSerializer):
+    """トークンを使用してのパスワード更新API専用シリアライザー"""
+    password = serializers.CharField()
+    token = serializers.CharField()

@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from account.models import User, UserActivationToken
+from account.models import PasswordResetToken, User, UserActivationToken
 
 
 @receiver(post_save, sender=User)
@@ -27,6 +27,27 @@ def send_user_activation_mail(sender, instance, created, **kwargs):
         subject=subject,
         message=render_to_string(
             'mail/user_activation_mail.txt',
+            context=context
+        ),
+    )
+
+
+@receiver(post_save, sender=PasswordResetToken)
+def send_mail_reset_password(sender, instance, created, **kwargs):
+    """ パスワード変更用URLを記載したメールを送信する """
+    if not created:
+        return
+    subject = 'パスワード変更用URLのお知らせ'
+    context = {
+        'user': instance.user,
+        'site_name': settings.SITE_NAME,
+        'token': instance.token,
+        'url_expiration_min': settings.PASSWORD_RESET_TOKEN_EXPIRED_MIN
+    }
+    instance.user.email_user(
+        subject=subject,
+        message=render_to_string(
+            'mail/reset_password_url_mail.txt',
             context=context
         ),
     )

@@ -1,26 +1,92 @@
+import datetime
+
+from django.conf import settings
+from django.utils import timezone
 from django.http.response import JsonResponse
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from rest_framework import generics, viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from account.models import User, UserActivationToken
+from account.models import PasswordResetToken, User, UserActivationToken
 from .permissions import UserViewsetsPermission
-from .serializer import UserSerializer
+from .serializer import (
+    UserSerializer,
+    PasswordSerializer,
+    PasswordSerializerWithToken
+)
 
 
 # Create your views here.
-class SignUpView(generics.CreateAPIView):
-    """新規会員登録API"""
-    permission_classes = [permissions.AllowAny,]
-    serializer_class = UserSerializer
-
-
 class UserViewsets(viewsets.ModelViewSet):
     """ユーザービュー"""
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (UserViewsetsPermission,)
+
+    @action(
+        detail=False,
+        methods=['post'],
+        permission_classes=[permissions.AllowAny])
+    def send_mail_password_change(self, request):
+        """パスワード変更用URLが記載されたメールを送信するAPI"""
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            try:
+                user = User.objects.get(email=request.POST['email'])
+            except KeyError:
+                return Response(
+                    {
+                        'errors': {'email': 'メールアドレスが必要です。', },
+                    },
+                    status=status.HTTP_400_BAD_REQUEST)
+            except User.DoesNotExist:
+                user = None
+        if user:
+            token_expired = timezone.now() + datetime.timedelta(
+                minutes=settings.PASSWORD_RESET_TOKEN_EXPIRED_MIN
+            )
+            # 過去の発行済トークンは使用済みにする
+            PasswordResetToken.objects.filter(
+                user__exact=user.pk,
+                is_used__exact=False
+            ).update(is_used=True)
+            PasswordResetToken.objects.create(
+                user=user, expired_at=token_expired
+            )
+        return Response(
+            {'message': 'パスワード変更用URLの発行を受け付けました。'},
+            status=status.HTTP_200_OK
+        )
+
+    @action(
+        detail=True,
+        methods=['post'],
+        permission_classes=[permissions.AllowAny])
+    def change_password_with_token(self, request, pk=None):
+        """トークンを使用して未ログイン状態でパスワード更新するAPI"""
+        serializer = PasswordSerializerWithToken(request.data)
+        if not serializer.is_valid:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        user = self.get_object()
+        token = PasswordResetToken.objects.filter(
+                user__exact=user.pk,
+                token__exact=serializer.validated_data['token'],
+                is_used__exact=False,
+                expired_at__gt=timezone.now()
+        )
+        if token.first() is None:
+            # 対象ユーザーの発行済トークンが取れなかった場合
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        # パスワード変更実施
+        user.set_password(serializer.validated_data['password'])
+        token.is_used = True
+        token.save()
+        return Response({'msg': 'パスワードを変更しました。'}, status=status.HTTP_200_OK)
+
+
 
 
 def activate_user(request, token):

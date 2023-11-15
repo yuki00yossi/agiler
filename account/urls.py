@@ -15,7 +15,6 @@ router = routers.DefaultRouter()
 router.register('account', views.UserViewsets, 'user')
 urlpatterns += router.urls
 
-
 # デバッグ用URL
 if settings.DEBUG:
     urlpatterns += [
