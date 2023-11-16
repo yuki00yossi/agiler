@@ -61,6 +61,17 @@ class UserViewsets(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
+    @action(detail=True, methods=['post'])
+    def change_password(self, request, pk=None):
+        """ログイン中のユーザーがパスワード更新を実行するAPI"""
+        serializer = PasswordSerializer(request.data)
+        if not serializer.is_valid:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        user = self.get_object()
+        user.set_password(serializer.validated_data['password'])
+        user.save()
+        return Response({'msg': 'パスワードを更新しました。'}, status=status.HTTP_200_OK)
+
     @action(
         detail=True,
         methods=['post'],
@@ -85,8 +96,6 @@ class UserViewsets(viewsets.ModelViewSet):
         token.is_used = True
         token.save()
         return Response({'msg': 'パスワードを変更しました。'}, status=status.HTTP_200_OK)
-
-
 
 
 def activate_user(request, token):
