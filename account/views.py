@@ -64,7 +64,7 @@ class UserViewsets(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def change_password(self, request, pk=None):
         """ログイン中のユーザーがパスワード更新を実行するAPI"""
-        serializer = PasswordSerializer(request.data)
+        serializer = PasswordSerializer(data=request.data)
         if not serializer.is_valid:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
@@ -78,9 +78,10 @@ class UserViewsets(viewsets.ModelViewSet):
         permission_classes=[permissions.AllowAny])
     def change_password_with_token(self, request, pk=None):
         """トークンを使用して未ログイン状態でパスワード更新するAPI"""
-        serializer = PasswordSerializerWithToken(request.data)
+        serializer = PasswordSerializerWithToken(data=request.data)
         if not serializer.is_valid():
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         token = PasswordResetToken.objects.filter(
                 user__exact=user.pk,
@@ -93,8 +94,8 @@ class UserViewsets(viewsets.ModelViewSet):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         # パスワード変更実施
         user.set_password(serializer.validated_data['password'])
-        token.is_used = True
-        token.save()
+        token[0].is_used = True
+        token[0].save()
         return Response({'msg': 'パスワードを変更しました。'}, status=status.HTTP_200_OK)
 
 
