@@ -95,8 +95,9 @@ class UserViewsets(viewsets.ModelViewSet):
         # パスワード変更実施
         user.set_password(serializer.validated_data['password'])
         user.save()
-        token[0].is_used = True
-        token[0].save()
+        token = token[0]
+        token.is_used = True
+        token.save()
         return Response({'msg': 'パスワードを変更しました。'}, status=status.HTTP_200_OK)
 
 
