@@ -28,6 +28,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', False)
 SITE_URL_ROOT = env('SITE_URL_ROOT')
+SITE_NAME = 'agiler'
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
@@ -147,6 +148,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
 # ユーザーアクティベーショントークンの有効期限（分）
 USER_ACTIVATION_EXPIRED_MIN = 30
+# パスワードリセットトークンの有効期限（分）
+PASSWORD_RESET_TOKEN_EXPIRED_MIN = 30
 
 # EMAIL SETTINGS
 EMAIL_BACKEND = env('EMAIL_BACKEND')
