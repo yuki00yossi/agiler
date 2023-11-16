@@ -21,3 +21,6 @@ if settings.DEBUG:
         path('debug/login', views.debug_login),
         path('debug/logout', views.logout),
     ]
+
+import pprint
+pprint.pprint(urlpatterns)
