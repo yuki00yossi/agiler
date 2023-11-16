@@ -79,7 +79,7 @@ class UserViewsets(viewsets.ModelViewSet):
     def change_password_with_token(self, request, pk=None):
         """トークンを使用して未ログイン状態でパスワード更新するAPI"""
         serializer = PasswordSerializerWithToken(request.data)
-        if not serializer.is_valid:
+        if not serializer.is_valid():
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         token = PasswordResetToken.objects.filter(
