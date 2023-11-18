@@ -71,3 +71,55 @@ class ResetPasswordTest(TestCase):
         # トークンが使用済みになっていること
         token = PasswordResetToken.objects.get(pk=token.pk)
         self.assertTrue(token.is_used)
+
+    def test_change_password_autorized_user(self):
+        """認証済みユーザー用のパスワード変更APIテスト"""
+        client = APIClient()
+        client.force_authenticate(user=self.user)
+        param = {
+            'password': 'fakjdfagkalj'
+        }
+        res = client.post(
+            reverse('account:user-change-password', args=[self.user.pk]),
+            data=param)
+        # HTTPレスポンスのチェック
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['msg'], 'パスワードを更新しました。')
+        # パスワードが更新されているチェック
+        user = User.objects.get(pk=self.user.pk)
+        self.assertTrue(user.check_password(param['password']))
+
+    def test_api_change_password_for_auth_user_failed(self):
+        """認証済みユーザー用のパスワード変更APIに認証情報無しで実行出来ないテスト"""
+        client = APIClient()
+        param = {
+            'password': 'dlkfjaljf'
+        }
+        res = client.post(
+            reverse('account:user-change-password', args=[self.user.pk]),
+            data=param
+        )
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        # 実際にパスワードが更新されていないことを確認
+        user = User.objects.get(pk=self.user.pk)
+        self.assertFalse(user.check_password(param['password']))
+
+    def test_api_change_password_for_auth_user_cannot_other_user_password(self):
+        """認証済みユーザーが他のユーザーのパスワードを変更することが出来ないテスト"""
+        client = APIClient()
+        auth_user = UserFactory()
+        client.force_authenticate(user=auth_user)
+        param = {
+            'password': 'newpasswordlkfll',
+        }
+        # 別ユーザーのPKを指定してPOST
+        res = client.post(
+            reverse('account:user-change-password', args=[self.user.pk]),
+            data=param
+        )
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # リクエストユーザーとPOSTで指定されたユーザーのいずれもパスワードが変更されないこと
+        user = User.objects.get(pk=self.user.pk)
+        self.assertFalse(user.check_password(param['password']))
+        auth_user2 = User.objects.get(pk=auth_user.pk)
+        self.assertFalse(auth_user2.check_password(param['password']))

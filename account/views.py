@@ -65,8 +65,10 @@ class UserViewsets(viewsets.ModelViewSet):
     def change_password(self, request, pk=None):
         """ログイン中のユーザーがパスワード更新を実行するAPI"""
         serializer = PasswordSerializer(data=request.data)
-        if not serializer.is_valid:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         user.set_password(serializer.validated_data['password'])
         user.save()
