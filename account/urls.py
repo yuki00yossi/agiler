@@ -12,7 +12,7 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
-router.register('account', views.UserViewsets, 'user')
+router.register('account', views.UserViewSet, 'user')
 urlpatterns += router.urls
 
 # デバッグ用URL

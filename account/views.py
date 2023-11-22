@@ -19,7 +19,7 @@ from .serializer import (
 
 
 # Create your views here.
-class UserViewsets(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """ユーザービュー"""
     serializer_class = UserSerializer
     queryset = User.objects.all()
