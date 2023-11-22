@@ -7,7 +7,7 @@ from .models import Organization
 
 
 # Create your views here.
-class OrganizationViewsets(viewsets.ModelViewSet):
+class OrganizationViewSet(viewsets.ModelViewSet):
     """ 組織のビュー """
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.filter(status=1)
