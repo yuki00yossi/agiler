@@ -23,7 +23,7 @@ class OrganizationFactory(DjangoModelFactory):
     tel_number = Faker('phone_number')
     manager_name = Faker('name')
     plans = random.choice(Organization.plan_choices)[0]
-    status = random.choice(Organization.status_coices)[0]
+    status = random.choice(Organization.status_choices)[0]
     created_at = Faker('date_time')
     updated_at = Faker('date_time')
 

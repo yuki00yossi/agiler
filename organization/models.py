@@ -11,7 +11,7 @@ class Organization(models.Model):
         (3, 'エンタープライズ')
     )
 
-    status_coices = (
+    status_choices = (
         (1, 'アクティブ'),
         (2, '非アクティブ'),
         (99, '利用停止'),
@@ -25,7 +25,7 @@ class Organization(models.Model):
     manager_name = models.CharField(verbose_name='担当者名', max_length=256)
     plans = models.IntegerField(verbose_name='利用プランID', choices=plan_choices)
     status = models.IntegerField(
-        verbose_name='ステータス', default=2, choices=status_coices
+        verbose_name='ステータス', default=2, choices=status_choices
     )
     members = models.ManyToManyField(
         get_user_model(),
