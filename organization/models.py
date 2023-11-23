@@ -58,6 +58,12 @@ class OrganizationUser(models.Model):
         (99, '停止'),
     )
 
+    role_choices = (
+        (1, '管理者'),
+        (2, '一般ユーザー'),
+        (3, '閲覧者'),
+    )
+
     organization = models.ForeignKey(
         Organization,
         verbose_name='所属組織',
@@ -69,6 +75,7 @@ class OrganizationUser(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    role = models.IntegerField(verbose_name='ロール', choices=role_choices)
     invited_at = models.DateTimeField(verbose_name='招待日', auto_now_add=True)
     joined_at = models.DateTimeField(verbose_name='参加日', null=True)
     status = models.IntegerField(verbose_name='ステータス', choices=status_choices)

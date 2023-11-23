@@ -12,5 +12,5 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
-router.register('organization', views.OrganizationViewSet, '')
+router.register('organization', views.OrganizationViewSet, 'org')
 urlpatterns += router.urls

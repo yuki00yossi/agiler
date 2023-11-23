@@ -1,6 +1,6 @@
 from rest_framework import serializers
-# from account.serializer import UserSerializer
-from organization.models import Organization
+from account.serializer import UserSerializer
+from organization.models import Organization, OrganizationUser
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -17,3 +17,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Organization.objects.create(**validated_data)
+
+
+class MemberSerializer(serializers.ModelSerializer):
+    """組織に所属しているユーザーに関するシリアライザー"""
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = OrganizationUser
+        fields = (
+            'id', 'user', 'invited_at', 'status',
+            'joined_at',
+        )

@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from account.models import PasswordResetToken, User, UserActivationToken
-from .permissions import UserViewsetsPermission
+from .permissions import UserViewSetPermission
 from .serializer import (
     UserSerializer,
     PasswordSerializer,
@@ -23,7 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """ユーザービュー"""
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (UserViewsetsPermission,)
+    permission_classes = (UserViewSetPermission,)
 
     @action(
         detail=False,
