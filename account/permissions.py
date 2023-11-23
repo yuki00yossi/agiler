@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class UserViewsetsPermission(permissions.BasePermission):
+class UserViewSetPermission(permissions.BasePermission):
     """ユーザーのパーミッション設定
 
     - スタッフ権限ユーザーからのリクエスト全て許可。
