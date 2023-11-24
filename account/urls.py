@@ -14,7 +14,7 @@ router = routers.DefaultRouter()
 router.register('account', views.UserViewSet, 'user')
 urlpatterns += router.urls
 
-# デバッグ用URL
+# デバッグ用URL ログイン済ユーザーしか叩けないAPIのテスト用
 if settings.DEBUG:
     urlpatterns += [
         path('debug/login', views.debug_login),
