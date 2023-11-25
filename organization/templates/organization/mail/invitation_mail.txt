@@ -1,0 +1,9 @@
+{{ user.last_name }}様
+
+{{ organization.name }}より組織への招待が送信されました。
+{{ site_name }}にログインして確認しましょう。
+{% if not user_flg %}
+あなたのログイン情報は以下の通りです。
+メールアドレス：{{ user.email }}
+初期パスワード：{{ password }}
+{% endif %}

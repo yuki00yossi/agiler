@@ -105,6 +105,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             from_email=settings.DEFAULT_FROM_EMAIL, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    @classmethod
+    def get_random_password(cls):
+        return secrets.token_urlsafe(16)
+
+
 
 class UserActivationTokenManager(models.Manager):
     """ ユーザーアクティベーション関連のマネージャー """
