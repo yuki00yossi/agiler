@@ -61,12 +61,28 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             if not serializer.is_valid():
                 return Response({serializer.error_messages}, status=status.HTTP_400_BAD_REQUEST)
             user = serializer.create(serializer.validated_data)
+        try:
+            invitation_info = OrganizationUser.objects.get(user=user, organization=obj)
+            if invitation_info.status == OrganizationUser.STATUS_ACTIVE:
+                return Response({'msg': 'このユーザーはすでに参加しています。'}, status=status.HTTP_400_BAD_REQUEST)
+            elif invitation_info.status == OrganizationUser.STATUS_DROPPED:
+                invitation_info.status = OrganizationUser.STATUS_INVITATION
+                invitation_info.save()
+        except OrganizationUser.DoesNotExist:
+            OrganizationUser.objects.create(
+                user=user, organization=obj, role=request.data['role'], status=OrganizationUser.STATUS_INVITATION)
+
+        self.send_invite_mail(user, password=law_password)
+        return Response({'msg': '招待メールを送信しました。'}, status.HTTP_200_OK)
+
+    def send_invite_mail(self, user, password=''):
+        """ユーザーに招待メールを送信する"""
         mail_context = {
             'user': user,
-            'organization': obj,
+            'organization': self.get_object(),
             'site_name': settings.SITE_NAME,
-            'user_flg': user_flg,
-            'password': law_password
+            'user_flg': password == '',
+            'password': password
         }
         user.email_user(
             subject='【重要なお知らせ】組織への招待が届いています。',
@@ -74,8 +90,6 @@ class OrganizationViewSet(viewsets.ModelViewSet):
                 'organization/mail/invitation_mail.txt',
                 context=mail_context),
         )
-
-        return Response({'msg': '招待メールを送信しました。'}, status.HTTP_200_OK)
 
 
 class OrganizationListJoined(generics.ListAPIView):
