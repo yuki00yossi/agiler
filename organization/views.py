@@ -1,5 +1,6 @@
 # from django.shortcuts import render
 from pprint import pprint
+from typing import Type
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -75,8 +76,18 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         self.send_invite_mail(user, password=law_password)
         return Response({'msg': '招待メールを送信しました。'}, status.HTTP_200_OK)
 
-    def send_invite_mail(self, user, password=''):
-        """ユーザーに招待メールを送信する"""
+    def send_invite_mail(self, user: Type[get_user_model()], password: str = '') -> None:
+        """ユーザーに招待メールを送信する
+
+        Parameters
+        ----------
+        user : User
+            送信先となるユーザーのインスタンス
+        password : str
+            ユーザーの生パスワード。デフォルトは空文字。招待時にユーザーを新規作成した場合は
+            初期パスワードをログイン情報としてメールに記載する為、必要。
+
+        """
         mail_context = {
             'user': user,
             'organization': self.get_object(),
