@@ -51,17 +51,31 @@ class Organization(models.Model):
 
 class OrganizationUser(models.Model):
     """ 組織とユーザーの中間テーブル """
+    # アクティブステータスの定数
+    STATUS_ACTIVE = 1
+    # 招待中ステータスの定数
+    STATUS_INVITATION = 2
+    # 停止ステータスの定数
+    STATUS_DROPPED = 99
+
+    # 管理者権限の定数
+    ROLE_ADMIN = 1
+    # 一般権限の定数
+    ROLE_GENERAL = 2
+    # 閲覧権限の定数
+    ROLE_READER = 3
+
     # メンバーステータスの選択肢
     status_choices = (
-        (1, 'active'),
-        (2, '招待中（参加待ち）'),
-        (99, '停止'),
+        (STATUS_ACTIVE, 'active'),
+        (STATUS_INVITATION, '招待中（参加待ち）'),
+        (STATUS_DROPPED, '停止'),
     )
 
     role_choices = (
-        (1, '管理者'),
-        (2, '一般ユーザー'),
-        (3, '閲覧者'),
+        (ROLE_ADMIN, '管理者'),
+        (ROLE_GENERAL, '一般ユーザー'),
+        (ROLE_READER, '閲覧者'),
     )
 
     organization = models.ForeignKey(
