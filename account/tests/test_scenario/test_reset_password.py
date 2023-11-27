@@ -72,7 +72,7 @@ class ResetPasswordTest(TestCase):
         token = PasswordResetToken.objects.get(pk=token.pk)
         self.assertTrue(token.is_used)
 
-    def test_change_password_autorized_user(self):
+    def test_change_password_authorized_user(self):
         """認証済みユーザー用のパスワード変更APIテスト"""
         client = APIClient()
         client.force_authenticate(user=self.user)
