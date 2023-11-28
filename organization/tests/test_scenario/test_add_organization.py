@@ -44,7 +44,7 @@ class AddOrganizationTest(TestCase):
         self.assertEqual(len(org), 1)
         # DBの値が正しいこと
         self.assertEqual(org[0].name, self.post_data['name'])
-        self.assertEqual(org[0].post_code, self.post_data['post_code'])
+        self.assertEqual(org[0].post_code, str(self.post_data['post_code']))
         self.assertEqual(org[0].prefecture, self.post_data['prefecture'])
         self.assertEqual(org[0].city, self.post_data['city'])
         self.assertEqual(org[0].address, self.post_data['address'])
@@ -61,6 +61,23 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=self.post_data)
         # 403が返ってくること
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_name(self):
+        """名前がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('name')
+        res = self.client.post(reverse('organization:org-list'), data=self.post_data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['name'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
