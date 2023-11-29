@@ -200,3 +200,22 @@ class AddOrganizationTest(TestCase):
         # DBに値が保存されていないこと
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
+
+    def test_validation_plan_does_not_exist(self):
+        """存在しないプランが選択されているときはエラーになること"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # ポストデータを変更
+        data = self.post_data
+        print(data)
+        data['plans'] = 999999
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
+        self.assertEqual(res.data['plans'][0], '"%s"は有効な選択肢ではありません。' % data['plans'])
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
