@@ -74,10 +74,129 @@ class AddOrganizationTest(TestCase):
         # 未ログインのままで組織作成APIを叩く
         data = self.post_data
         data.pop('name')
-        res = self.client.post(reverse('organization:org-list'), data=self.post_data)
+        res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(res.data['name'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_post_code(self):
+        """郵便番号がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('post_code')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['post_code'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_prefecture(self):
+        """都道府県がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('prefecture')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['prefecture'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_city(self):
+        """市区町村がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('city')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['city'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_address(self):
+        """市区町村以下の住所がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('address')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['address'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_tel_number(self):
+        """電話番号がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('tel_number')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['tel_number'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_manager_name(self):
+        """管理者名がないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('manager_name')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['manager_name'][0], 'この項目は必須です。')
+        # DBに値が保存されていないこと
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+
+    def test_validation_require_plan(self):
+        """プランがないと組織作成ができないこと"""
+        # まずは組織テーブルが空であること
+        self.client.force_authenticate(user=self.user)
+        org = Organization.objects.all()
+        self.assertEqual(len(org), 0)
+        # 未ログインのままで組織作成APIを叩く
+        data = self.post_data
+        data.pop('plans')
+        res = self.client.post(reverse('organization:org-list'), data=data)
+        # 400が返ってくること
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data['plans'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
