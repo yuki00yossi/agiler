@@ -71,7 +71,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('name')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -88,7 +88,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('post_code')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -105,7 +105,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('prefecture')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -122,7 +122,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('city')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -139,7 +139,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('address')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -156,7 +156,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('tel_number')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -173,7 +173,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('manager_name')
         res = self.client.post(reverse('organization:org-list'), data=data)
@@ -190,7 +190,7 @@ class AddOrganizationTest(TestCase):
         self.client.force_authenticate(user=self.user)
         org = Organization.objects.all()
         self.assertEqual(len(org), 0)
-        # 未ログインのままで組織作成APIを叩く
+        # ポストデータを変更
         data = self.post_data
         data.pop('plans')
         res = self.client.post(reverse('organization:org-list'), data=data)
