@@ -77,6 +77,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['name'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -94,6 +95,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['post_code'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -111,6 +113,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['prefecture'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -128,6 +131,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['city'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -145,6 +149,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['address'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -162,6 +167,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['tel_number'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -179,6 +185,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['manager_name'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
@@ -196,6 +203,7 @@ class AddOrganizationTest(TestCase):
         res = self.client.post(reverse('organization:org-list'), data=data)
         # 400が返ってくること
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # エラー文言が期待通りであること
         self.assertEqual(res.data['plans'][0], 'この項目は必須です。')
         # DBに値が保存されていないこと
         org = Organization.objects.all()
