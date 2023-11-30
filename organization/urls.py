@@ -14,3 +14,6 @@ urlpatterns = [
 router = routers.DefaultRouter()
 router.register('organization', views.OrganizationViewSet, 'org')
 urlpatterns += router.urls
+
+from pprint import pprint
+pprint(urlpatterns)
